@@ -1,0 +1,40 @@
+{% extends "booking/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3>Book Travel</h3>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Travel Details</h5>
+                    <div class="card">
+                        <div class="card-body">
+                            <p><strong>Type:</strong> {{ travel_option.type }}</p>
+                            <p><strong>Route:</strong> {{ travel_option.source }} to {{ travel_option.destination }}</p>
+                            <p><strong>Departure:</strong> {{ travel_option.departure_date }} at {{ travel_option.departure_time }}</p>
+                            <p><strong>Price per seat:</strong> ${{ travel_option.price }}</p>
+                            <p><strong>Available seats:</strong> {{ travel_option.available_seats }}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        <legend class="border-bottom mb-4">Booking Information</legend>
+                        {{ form|crispy }}
+                    </fieldset>
+                    <div class="form-group mt-3">
+                        <button class="btn btn-primary" type="submit">Confirm Booking</button>
+                        <a href="{% url 'travel_list' %}" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

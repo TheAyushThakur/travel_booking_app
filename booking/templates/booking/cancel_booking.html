@@ -1,0 +1,37 @@
+{% extends "booking/base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>Cancel Booking</h3>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-warning">
+                    <h5>Are you sure you want to cancel this booking?</h5>
+                    <p class="mb-0">This action cannot be undone.</p>
+                </div>
+                
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5>Booking Details</h5>
+                        <p><strong>Travel:</strong> {{ booking.travel_option.type }} from {{ booking.travel_option.source }} to {{ booking.travel_option.destination }}</p>
+                        <p><strong>Departure:</strong> {{ booking.travel_option.departure_date }} at {{ booking.travel_option.departure_time }}</p>
+                        <p><strong>Seats:</strong> {{ booking.number_of_seats }}</p>
+                        <p><strong>Total Amount:</strong> ${{ booking.total_price }}</p>
+                    </div>
+                </div>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{% url 'booking_list' %}" class="btn btn-secondary me-md-2">Keep Booking</a>
+                        <button type="submit" class="btn btn-danger">Confirm Cancellation</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

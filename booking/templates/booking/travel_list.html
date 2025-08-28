@@ -1,0 +1,56 @@
+{% extends "booking/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<h2 class="mb-4">Available Travel Options</h2>
+
+<div class="card mb-4">
+    <div class="card-header">
+        <h5>Search Filters</h5>
+    </div>
+    <div class="card-body">
+        <form method="GET">
+            <div class="row">
+                <div class="col-md-3">{{ form.type|as_crispy_field }}</div>
+                <div class="col-md-3">{{ form.source|as_crispy_field }}</div>
+                <div class="col-md-3">{{ form.destination|as_crispy_field }}</div>
+                <div class="col-md-3">{{ form.departure_date|as_crispy_field }}</div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-3">Search</button>
+            <a href="{% url 'travel_list' %}" class="btn btn-secondary mt-3">Clear</a>
+        </form>
+    </div>
+</div>
+
+{% for travel in travel_options %}
+<div class="card mb-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <h5 class="card-title">{{ travel.type }}: {{ travel.source }} to {{ travel.destination }}</h5>
+                <p class="card-text">
+                    <strong>Departure:</strong> {{ travel.departure_date }} at {{ travel.departure_time }}<br>
+                    <strong>Price:</strong> ${{ travel.price }} per seat<br>
+                    <strong>Available Seats:</strong> {{ travel.available_seats }}
+                </p>
+            </div>
+            <div class="col-md-4 text-end">
+                {% if user.is_authenticated %}
+                    {% if travel.available_seats > 0 %}
+                    <a href="{% url 'book_travel' travel.travel_id %}" class="btn btn-primary">Book Now</a>
+                    {% else %}
+                    <button class="btn btn-secondary" disabled>Sold Out</button>
+                    {% endif %}
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Login to Book</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% empty %}
+<div class="alert alert-info">
+    No travel options found matching your criteria.
+</div>
+{% endfor %}
+{% endblock %}

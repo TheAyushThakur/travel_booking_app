@@ -1,0 +1,41 @@
+{% extends "booking/base.html" %}
+
+{% block content %}
+<h2 class="mb-4">My Bookings</h2>
+
+{% if bookings %}
+    {% for booking in bookings %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5 class="card-title">
+                        {{ booking.travel_option.type }}: {{ booking.travel_option.source }} to {{ booking.travel_option.destination }}
+                        {% if booking.status == 'Cancelled' %}
+                            <span class="badge bg-secondary ms-2">{{ booking.status }}</span>
+                        {% else %}
+                            <span class="badge bg-success ms-2">{{ booking.status }}</span>
+                        {% endif %}
+                    </h5>
+                    <p class="card-text">
+                        <strong>Departure:</strong> {{ booking.travel_option.departure_date }} at {{ booking.travel_option.departure_time }}<br>
+                        <strong>Seats:</strong> {{ booking.number_of_seats }}<br>
+                        <strong>Total Price:</strong> ${{ booking.total_price }}<br>
+                        <strong>Booked on:</strong> {{ booking.booking_date|date:"F d, Y H:i" }}
+                    </p>
+                </div>
+                <div class="col-md-4 text-end">
+                    {% if booking.status == 'Confirmed' %}
+                    <a href="{% url 'cancel_booking' booking.booking_id %}" class="btn btn-danger">Cancel Booking</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="alert alert-info">
+    You don't have any bookings yet. <a href="{% url 'travel_list' %}">Browse travel options</a> to make your first booking!
+</div>
+{% endif %}
+{% endblock %}
